@@ -2,6 +2,10 @@
 import React, { useState } from "react";
 import "./App.css";
 import BottomRow from "./BottomRow";
+import quarter from "./BottomRow"
+import setQuarter from "./BottomRow"
+import upQuarter from "./BottomRow"
+
 
 function App()
 {
@@ -9,7 +13,10 @@ function App()
 
   const [homeScore, setHomeScore] = useState(0)
   const [awayScore, setAwayScore] = useState(0)
-  // const [quarter, setQuarter] = useState(0)
+  const [quarter, setQuarter] = useState(1)
+  const [down, setDown] = useState(1)
+  const [ballOn, setBallOn] = useState(99)
+  
 
 
   function clickAction(team, amount)
@@ -20,12 +27,56 @@ function App()
 
     else if (team === 'away')
 
-    { (setAwayScore(awayScore + amount))}
+    { (setAwayScore(awayScore + amount)) }
   }
 
-// function upQuarter(){
-//   setQuarter(quarter + 1)
-// }
+  function increment(what)
+  {
+    switch (what)
+    {
+      case 'down':
+        if (down % 4 == 0) { setDown(1) }
+        else { setDown(down + 1) }
+        break
+
+      case 'quarter':
+        if (quarter % 4 == 0) { setQuarter(1) }
+        else { setQuarter(quarter + 1) }
+        break
+    }
+  }
+
+
+function yardsRan(){
+  const x = Math.floor(Math.random()*20)
+  if (x> ballOn){
+    setBallOn(0)
+    console.log("Touchdown!")
+  }
+  else{
+    setBallOn(ballOn - x)
+  }
+  if (ballOn <1){
+    alert("Touchdown!!!")
+  }
+}
+
+
+
+
+
+  // REFACTORED
+  // function upQuarter()
+  // {
+  //   if (quarter % 4 == 0) { setQuarter(1) }
+  //   else { setQuarter(quarter + 1) }
+  // }
+
+  // function upDown()
+  // {
+  //   if (down % 4 == 0) { setDown(1) }
+  //   else { setDown(down + 1) }
+  // }
 
 
 
@@ -46,7 +97,7 @@ function App()
             <div className="away__score">{awayScore}</div>
           </div>
         </div>
-        <BottomRow />
+        <BottomRow down={down} quarter={quarter} ballOn={ballOn} />
       </section>
       <section className="buttons">
         <div className="homeButtons">
@@ -55,10 +106,14 @@ function App()
           <button className="homeButtons__fieldGoal" onClick={() => clickAction('home', 3)}>Home Field Goal</button>
         </div>
         <div className="awayButtons">
-          <button className="awayButtons__touchdown" onClick= {()=> clickAction('away', 7)}>Away Touchdown</button>
-          <button className="awayButtons__fieldGoal"onClick= {()=> clickAction('away', 3)}>Away Field Goal</button>
+          <button className="awayButtons__touchdown" onClick={() => clickAction('away', 7)}>Away Touchdown</button>
+          <button className="awayButtons__fieldGoal" onClick={() => clickAction('away', 3)}>Away Field Goal</button>
         </div>
-        {/* <button className="quarterup" onClick= {()=> upQuarter()}>Increment quarter</button> */}
+        <button className="downup" onClick={() => increment('down')}>Next Down</button>
+        <button className="quarterup" onClick={() => increment('quarter')}>Increment quarter</button>
+        <button className="yards" onClick={() => yardsRan()}>Run a play</button>
+
+
       </section>
     </div>
   );
