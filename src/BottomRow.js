@@ -1,5 +1,20 @@
-import React from "react";
+import React, {useState} from "react";
 import "./App.css";
+
+
+
+
+
+// const [quarter, setQuarter] = useState(0)
+
+
+// function upQuarter(){
+//   setQuarter(quarter + 1)
+// }
+
+
+
+
 
 const BottomRow = () => {
   return (
