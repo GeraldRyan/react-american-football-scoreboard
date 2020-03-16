@@ -1,7 +1,9 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import "./App.css";
 
-const BottomRow = (props) => {
+
+const BottomRow = (props) =>
+{
   return (
     <div className="bottomRow">
       <div className="down">
@@ -20,6 +22,7 @@ const BottomRow = (props) => {
         <h3 className="quarter__title">Quarter</h3>
         <div className="quarter__value">{props.quarter}</div>
       </div>
+      <div className="possessor">Ball: {props.possessor}</div>
     </div>
   );
 };
