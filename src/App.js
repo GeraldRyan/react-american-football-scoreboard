@@ -18,6 +18,7 @@ function App()
   const [minutesInQuarter, setMinutesInQuarter] = useState(15)
   const [secondsInQuarter, setSecondsInQuarter] = useState(0)
   const [togo, setTogo] = useState(10)
+  const [yards, setYards] = useState(0)
 
 
   // if (tSeconds ===0){
@@ -27,21 +28,55 @@ function App()
 
   function kickFG()
   {
-    if (down === 4 && ballOn < 45)
-    {
-      if (possessor == 'home')
-      {
-        setHomeScore(homeScore + 3)
-      }
-      else (setAwayScore(awayScore + 3))
-      console.log("field goal")
+    if (ballOn< 30){
+      score(3)
     }
+    else if(ballOn<40){
+      if (Math.random()> .25){
+        score(3)
+      }
+    }
+    else if(ballOn<50){
+      if (Math.random()<.25){
+        score(3)
+      }
+    }
+    setTogo(10)
+    setBallOn(Math.floor(Math.random()*30)+69)
+    turnover()
+  }
+
+  function punt(){
+    let maxDistance = ballOn
+    let covered = 100-ballOn
+    let kickingDistance = 0
+    let r = Math.random()
+    if (r>.5){
+      kickingDistance = maxDistance - Math.floor(Math.random()*20)
+    }
+    else{
+      kickingDistance = maxDistance - Math.floor(Math.random()*30)
+    }
+    setBallOn(covered+kickingDistance)
     turnover()
 
+}
+
+function score(x){
+  if (possessor === 'home')
+  {
+    setHomeScore(homeScore+x)
   }
+  else
+  {
+    setAwayScore(awayScore+x)
+  }
+}
+
 
   function turnover()
   {
+    setDown(1)
     if (possessor === 'home')
     {
       setPossessor("away")
@@ -50,19 +85,30 @@ function App()
     {
       setPossessor('home')
     }
-    setDown(1)
     if (ballOn > 10)
     {
       setTogo(10)
     }
     else { setTogo(ballOn) }
+
   }
+
+
+
+
   function changeTime()
   {
     const secondsPassed = Math.floor(Math.random() * 20)
     setTotalSecondsInQuarter(totalSecondsInQuarter - secondsPassed)
     setMinutesInQuarter(Math.floor(totalSecondsInQuarter / 60))
     setSecondsInQuarter(totalSecondsInQuarter - minutesInQuarter * 60)
+    if (totalSecondsInQuarter<0 && quarter !==4){
+      setQuarter(quarter+1)
+      setTotalSecondsInQuarter(15*60)
+    }
+    if (totalSecondsInQuarter<0 && quarter ===4){
+console.log("We know who the winner is")
+    }
   }
 
   function clickAction(team, amount)
@@ -84,6 +130,8 @@ function App()
         if (down % 4 == 0)
         {
           setDown(1)
+          turnover()
+          setBallOn(100-ballOn)
         }
         else { setDown(down + 1) }
         break
@@ -111,6 +159,7 @@ function App()
     }
     else { setAwayScore(awayScore + 7) }
     turnover()
+    setBallOn(75 + Math.floor(Math.random()*25))
   }
 
   function newGame()
@@ -124,6 +173,7 @@ function App()
     setSecondsInQuarter(0)
     setBallOn(90)
     setTogo(10)
+    setYards(0)
   }
 
   function throwPass()
@@ -140,12 +190,17 @@ function App()
     }
     else if (r < .66)
     { yardsReceived = Math.floor(Math.random() * 4) + 3 } // 3-7
-    else { yardsReceived = Math.floor(Math.random() * 60) }
+    else if(r< 80){
+      yardsReceived = Math.floor(Math.random()*30) -10
+    }
+    else { yardsReceived = Math.floor(Math.random() * 70) }
+    console.log("Yards received:" + yardsReceived)
+    setYards(yardsReceived)
 
     if (yardsReceived > ballOn)
     {
       console.log('touchdown')
-      touchdown()
+      touchdown(possessor)
     }
     else if (yardsReceived < togo && down === 4)
     {
@@ -155,11 +210,14 @@ function App()
     else if (yardsReceived > togo)
     {
       firstDown()
-      setTogo(togo-yardsReceived)
+      setTogo(10)
       setBallOn(ballOn-yardsReceived)
     }
-    setBallOn(ballOn - yardsReceived)
-    setDown(down + 1)
+    else{
+      setDown(down+1)
+      setBallOn(ballOn-yardsReceived)
+    }
+
   }
 
   function runPlay()
@@ -177,7 +235,7 @@ function App()
       setTotalSecondsInQuarter(15 * 60)
     }
     const c = Math.random()
-    let yardsRan = Math.floor(Math.random() * 100)  // random between 0-30
+    let yardsRan = Math.floor(Math.random() * 85)  // random between 0-100
     if (c < .33)
     {
       yardsRan = 0
@@ -190,7 +248,7 @@ function App()
     }
     else if (c < .96) { yardsRan = Math.floor(yardsRan * .5) }
     console.log(yardsRan)
-
+    setYards(yardsRan)
     if (yardsRan > ballOn)  // if more than enough to score
     {
       setBallOn(99)   // make yards to go == zero
@@ -211,12 +269,13 @@ function App()
     {
       setTogo(10)
       setDown(1)
+      setBallOn(ballOn-yardsRan)
     }
     else
     {
       if (down === 4)
       {
-        setBallOn(75)
+        setBallOn(100-(ballOn-yardsRan))
         turnover()
       }
       else
@@ -266,7 +325,7 @@ function App()
             <div className="away__score">{awayScore}</div>
           </div>
         </div>
-        <BottomRow down={down} quarter={quarter} ballOn={ballOn} possessor={possessor} togo={togo} />
+        <BottomRow down={down} quarter={quarter} ballOn={ballOn} possessor={possessor} togo={togo} yards={yards} />
       </section>
       <section className="buttons">
         <div className="homeButtons">
@@ -282,10 +341,13 @@ function App()
         <button className="quarterup" onClick={() => increment('quarter')}>Increment quarter</button>
         <button className="yards" onClick={() => runPlay()}>Run a play</button>
         <button className="yards" onClick={() => throwPass()}>Throw a pass</button>
+        <button className="yards" onClick={() => kickFG()}>Kick FG</button>
+        <button className="yards" onClick={() => punt()}>Punt</button>
         <button className="yards" onClick={() => newGame()}>Start Over</button>
 
 
       </section>
+      <div className="yards" style={{fontSize: '2rem', textAlign: 'center', width: '100%', margin: '15px auto'}} >Yards: {yards}</div>
     </div>
   );
 }
