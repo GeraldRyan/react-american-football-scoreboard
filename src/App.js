@@ -100,7 +100,7 @@ function score(x){
   {
     const secondsPassed = Math.floor(Math.random() * 20)
     setTotalSecondsInQuarter(totalSecondsInQuarter - secondsPassed)
-    setMinutesInQuarter(Math.floor(totalSecondsInQuarter / 60))
+    setMinutesInQuarter(String(Math.floor(totalSecondsInQuarter / 60)).padStart(2,'0'))
     setSecondsInQuarter(String(Math.abs(totalSecondsInQuarter - minutesInQuarter * 60)).padStart(2,'0'))
     if (totalSecondsInQuarter<0 && quarter !==4){
       setQuarter(quarter+1)
@@ -170,11 +170,15 @@ console.log("We know who the winner is")
     setDown(1)
     setTotalSecondsInQuarter(15 * 60)
     setMinutesInQuarter(15)
-    setSecondsInQuarter(0)
+    setSecondsInQuarter(String(0).padStart(2,'0'))
     setBallOn(90)
     setTogo(10)
     setYards(0)
   }
+
+//TODO refactor- create a function that takes a typeOfPlay argument (e.g. pass or throw) and returns a distance
+// Create a randomBetween function that returns an int between two given numbers passed as parameters.  
+
 
   function throwPass()
   {
@@ -216,6 +220,7 @@ console.log("We know who the winner is")
     else{
       setDown(down+1)
       setBallOn(ballOn-yardsReceived)
+      setTogo(togo - yardsReceived)
     }
 
   }
@@ -341,12 +346,18 @@ console.log(String(5).padStart(2, '0')); // Try this to pad the number on the ti
           <button className="awayButtons__touchdown" onClick={() => clickAction('away', 7)}>Away Touchdown</button>
           <button className="awayButtons__fieldGoal" onClick={() => clickAction('away', 3)}>Away Field Goal</button>
         </div>
+        <div>
         <button className="downup" onClick={() => increment('down')}>Next Down</button>
         <button className="quarterup" onClick={() => increment('quarter')}>Increment quarter</button>
+        </div>
+        <div class='playButtons'>
         <button className="yards" onClick={() => runPlay()}>Run a play</button>
         <button className="yards" onClick={() => throwPass()}>Throw a pass</button>
+        </div>
+        <div div class='playButtons'>
         <button className="yards" onClick={() => kickFG()}>Kick FG</button>
         <button className="yards" onClick={() => punt()}>Punt</button>
+        </div>
         <button className="yards" onClick={() => newGame()}>Start Over</button>
 
 
