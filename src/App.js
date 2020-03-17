@@ -16,7 +16,7 @@ function App()
   const [numPlays, setNumPlays] = useState(0)
   const [totalSecondsInQuarter, setTotalSecondsInQuarter] = useState(15 * 60)
   const [minutesInQuarter, setMinutesInQuarter] = useState(15)
-  const [secondsInQuarter, setSecondsInQuarter] = useState(0)
+  const [secondsInQuarter, setSecondsInQuarter] = useState(String(0).padStart(2,'0'))
   const [togo, setTogo] = useState(10)
   const [yards, setYards] = useState(0)
 
@@ -101,7 +101,7 @@ function score(x){
     const secondsPassed = Math.floor(Math.random() * 20)
     setTotalSecondsInQuarter(totalSecondsInQuarter - secondsPassed)
     setMinutesInQuarter(Math.floor(totalSecondsInQuarter / 60))
-    setSecondsInQuarter(totalSecondsInQuarter - minutesInQuarter * 60)
+    setSecondsInQuarter(String(Math.abs(totalSecondsInQuarter - minutesInQuarter * 60)).padStart(2,'0'))
     if (totalSecondsInQuarter<0 && quarter !==4){
       setQuarter(quarter+1)
       setTotalSecondsInQuarter(15*60)
@@ -289,7 +289,11 @@ console.log("We know who the winner is")
 
   }
 
+  function pad(n) {
+    return (n < 10) ? ("0" + n) : n;
+}  // Custom function to try to pad timer 0 when single digit
 
+console.log(String(5).padStart(2, '0')); // Try this to pad the number on the timer
 
 
 
