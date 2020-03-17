@@ -13,7 +13,23 @@ function App()
   const [down, setDown] = useState(1)
   const [ballOn, setBallOn] = useState(99)
   const [possessor, setPossessor] = useState('home')
+  const [numPlays, setNumPlays] = useState(0)
+  const [totalSecondsInQuarter, setTotalSecondsInQuarter] = useState(15*60)
+  const [minutesInQuarter, setMinutesInQuarter] = useState(15)
+  const [secondsInQuarter, setSecondsInQuarter] = useState(0)
 
+
+
+  // if (tSeconds ===0){
+  //   setTimer(`${tMinutes}:00`)
+  // }
+
+  function changeTime(){
+    const secondsPassed = Math.floor(Math.random()*20)
+    setTotalSecondsInQuarter(totalSecondsInQuarter - secondsPassed)
+    setMinutesInQuarter(Math.floor(totalSecondsInQuarter/60))
+    setSecondsInQuarter(totalSecondsInQuarter - minutesInQuarter*60)
+  }
 
   function clickAction(team, amount)
   {
@@ -31,35 +47,80 @@ function App()
     switch (what)
     {
       case 'down':
-        if (down % 4 == 0) { setDown(1) 
+        if (down % 4 == 0)
+        {
+          setDown(1)
         }
         else { setDown(down + 1) }
         break
 
       case 'quarter':
         if (quarter % 4 == 0) { setQuarter(1) }
-        else { setQuarter(quarter + 1) 
+        else
+        {
+          setQuarter(quarter + 1)
         }
         break
     }
   }
 
+function newGame(){
+  setQuarter(1)
+  setAwayScore(0)
+  setHomeScore(0)
+  setDown(1)
+  setTotalSecondsInQuarter(15*60)
+}
+
 
   function runPlay()
   {
-    const yardsRan = Math.floor(Math.random() * 20)  // random between 1-20
+    setNumPlays(numPlays + 1)
+    console.log(numPlays)
+    changeTime()
+    if (totalSecondsInQuarter <1 && quarter ===4){
+      alert(`We have ourselves a winner! Congratulations ${possessor} team, by a margin of ${Math.abs(homeScore-setAwayScore)}. Let's play again!`)
+      newGame()
+    }
+    else if (totalSecondsInQuarter <1){
+      setQuarter(quarter +1)
+      setTotalSecondsInQuarter(15*60)
+    }
+
+    const yardsRan = Math.floor(Math.random() * 30)  // random between 0-30
 
     if (yardsRan > ballOn)  // if more than enough to score
     {
       setBallOn(99)   // make yards to go == zero
-      alert("Touchdown!")  
-      const coinToss = Math.random()  // determines who scores
-      if (coinToss > .5) { setHomeScore( homeScore + 7) }  
-      else { setAwayScore(awayScore + 7) }
+      console.log(`Touchdown ${possessor}!`)
+      if (possessor === 'home')
+      {
+        setHomeScore(homeScore + 7)
+        setPossessor('away')
+      }
+      else
+      {
+        setAwayScore(awayScore + 7)
+        setPossessor('home')
+      }
+      setDown(1)
     }
     else
     {
-      setBallOn(ballOn - yardsRan)
+      if (down === 4)
+      {
+        setBallOn(75)
+        if (possessor === 'home') { setPossessor('away') } else
+        {
+          setPossessor('home')
+        }
+        setDown(1)
+      }
+      else
+      {
+        setBallOn(ballOn - yardsRan)
+        increment('down')
+      }
     }
 
 
@@ -70,11 +131,11 @@ function App()
 
 
   // REFACTORED
-  function upQuarter()
-  {
-    if (quarter % 4 == 0) { setQuarter(1) }
-    else { setQuarter(quarter + 1) }
-  }
+  // function upQuarter()
+  // {
+  //   if (quarter % 4 == 0) { setQuarter(1) }
+  //   else { setQuarter(quarter + 1) }
+  // }
 
   // function upDown()
   // {
@@ -95,7 +156,7 @@ function App()
 
             <div className="home__score">{homeScore}</div>
           </div>
-          <div className="timer">00:03</div>
+          <div className="timer">{minutesInQuarter}:{secondsInQuarter}</div>
           <div className="away">
             <h2 className="away__name">Tigers</h2>
             <div className="away__score">{awayScore}</div>
@@ -116,6 +177,7 @@ function App()
         <button className="downup" onClick={() => increment('down')}>Next Down</button>
         <button className="quarterup" onClick={() => increment('quarter')}>Increment quarter</button>
         <button className="yards" onClick={() => runPlay()}>Run a play</button>
+        <button className="yards" onClick={() => newGame()}>Start Over</button>
 
 
       </section>
