@@ -5,7 +5,7 @@ import BottomRow from "./BottomRow";
 
 function App()
 {
-  //TODO: STEP 2 - Establish your application's state with some useState hooks.  You'll need one for the home score and another for the away score.
+  //TODO: STEP 2 - Establish your application's state with some useState hooks.  You'll need one for the home score and another for the away score.d
 
   const [homeScore, setHomeScore] = useState(0)
   const [awayScore, setAwayScore] = useState(0)
@@ -26,25 +26,36 @@ function App()
   // }
 
 
+function randBetween(low, high){
+
+}
+
   function kickFG()
   {
     if (ballOn< 30){
       score(3)
     }
     else if(ballOn<40){
-      if (Math.random()> .25){
+      if (Math.random()> .15){
         score(3)
+        setBallOn(Math.floor(Math.random()*30)+69)
       }
     }
     else if(ballOn<50){
       if (Math.random()<.25){
         score(3)
+        setBallOn(Math.floor(Math.random()*30)+69)
       }
     }
     setTogo(10)
-    setBallOn(Math.floor(Math.random()*30)+69)
+    changeSides(0)
     turnover()
   }
+
+
+function changeSides(yards){
+  setBallOn(100-(ballOn-yards))
+}
 
   function punt(){
     let maxDistance = ballOn
@@ -98,7 +109,7 @@ function score(x){
 
   function changeTime()
   {
-    const secondsPassed = Math.floor(Math.random() * 20)
+    const secondsPassed = Math.floor(Math.random() * 30)
     setTotalSecondsInQuarter(totalSecondsInQuarter - secondsPassed)
     setMinutesInQuarter(String(Math.floor(totalSecondsInQuarter / 60)).padStart(2,'0'))
     setSecondsInQuarter(String(Math.abs(totalSecondsInQuarter - minutesInQuarter * 60)).padStart(2,'0'))
@@ -131,7 +142,8 @@ console.log("We know who the winner is")
         {
           setDown(1)
           turnover()
-          setBallOn(100-ballOn)
+          // setBallOn(100-ballOn)
+          changeSides(0)
         }
         else { setDown(down + 1) }
         break
@@ -208,7 +220,7 @@ console.log("We know who the winner is")
     }
     else if (yardsReceived < togo && down === 4)
     {
-      setBallOn(100-(ballOn - yardsReceived))
+      changeSides(yardsReceived) // formerly  setBallOn(100-(ballOn - yardsReceived))
       turnover()
     }
     else if (yardsReceived > togo)
@@ -280,7 +292,7 @@ console.log("We know who the winner is")
     {
       if (down === 4)
       {
-        setBallOn(100-(ballOn-yardsRan))
+        changeSides(yardsRan)  // formerly setBallOn(100-(ballOn-yardsRan))
         turnover()
       }
       else
@@ -298,7 +310,7 @@ console.log("We know who the winner is")
     return (n < 10) ? ("0" + n) : n;
 }  // Custom function to try to pad timer 0 when single digit
 
-console.log(String(5).padStart(2, '0')); // Try this to pad the number on the timer
+// console.log(String(5).padStart(2, '0')); // Try this to pad the number on the timer
 
 
 
