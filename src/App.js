@@ -16,7 +16,7 @@ function App()
   const [numPlays, setNumPlays] = useState(0)
   const [totalSecondsInQuarter, setTotalSecondsInQuarter] = useState(15 * 60)
   const [minutesInQuarter, setMinutesInQuarter] = useState(15)
-  const [secondsInQuarter, setSecondsInQuarter] = useState(String(0).padStart(2,'0'))
+  const [secondsInQuarter, setSecondsInQuarter] = useState(String(0).padStart(2, '0'))
   const [togo, setTogo] = useState(10)
   const [yards, setYards] = useState(0)
 
@@ -26,25 +26,31 @@ function App()
   // }
 
 
-function randBetween(low, high){
+  function randBetween(low, high)
+  {
 
-}
+  }
 
   function kickFG()
   {
-    if (ballOn< 30){
+    if (ballOn < 30)
+    {
       score(3)
     }
-    else if(ballOn<40){
-      if (Math.random()> .15){
+    else if (ballOn < 40)
+    {
+      if (Math.random() > .15)
+      {
         score(3)
-        setBallOn(Math.floor(Math.random()*30)+69)
+        setBallOn(Math.floor(Math.random() * 30) + 69)
       }
     }
-    else if(ballOn<50){
-      if (Math.random()<.25){
+    else if (ballOn < 50)
+    {
+      if (Math.random() < .25)
+      {
         score(3)
-        setBallOn(Math.floor(Math.random()*30)+69)
+        setBallOn(Math.floor(Math.random() * 30) + 69)
       }
     }
     setTogo(10)
@@ -53,36 +59,41 @@ function randBetween(low, high){
   }
 
 
-function changeSides(yards){
-  setBallOn(100-(ballOn-yards))
-}
+  function changeSides(yards)
+  {
+    setBallOn(100 - (ballOn - yards))
+  }
 
-  function punt(){
+  function punt()
+  {
     let maxDistance = ballOn
-    let covered = 100-ballOn
+    let covered = 100 - ballOn
     let kickingDistance = 0
     let r = Math.random()
-    if (r>.5){
-      kickingDistance = maxDistance - Math.floor(Math.random()*20)
+    if (r > .5)
+    {
+      kickingDistance = maxDistance - Math.floor(Math.random() * 20)
     }
-    else{
-      kickingDistance = maxDistance - Math.floor(Math.random()*30)
+    else
+    {
+      kickingDistance = maxDistance - Math.floor(Math.random() * 30)
     }
-    setBallOn(covered+kickingDistance)
+    setBallOn(covered + kickingDistance)
     turnover()
 
-}
+  }
 
-function score(x){
-  if (possessor === 'home')
+  function score(x)
   {
-    setHomeScore(homeScore+x)
+    if (possessor === 'home')
+    {
+      setHomeScore(homeScore + x)
+    }
+    else
+    {
+      setAwayScore(awayScore + x)
+    }
   }
-  else
-  {
-    setAwayScore(awayScore+x)
-  }
-}
 
 
   function turnover()
@@ -111,14 +122,16 @@ function score(x){
   {
     const secondsPassed = Math.floor(Math.random() * 30)
     setTotalSecondsInQuarter(totalSecondsInQuarter - secondsPassed)
-    setMinutesInQuarter(String(Math.floor(totalSecondsInQuarter / 60)).padStart(2,'0'))
-    setSecondsInQuarter(String(Math.abs(totalSecondsInQuarter - minutesInQuarter * 60)).padStart(2,'0'))
-    if (totalSecondsInQuarter<0 && quarter !==4){
-      setQuarter(quarter+1)
-      setTotalSecondsInQuarter(15*60)
+    setMinutesInQuarter(String(Math.floor(totalSecondsInQuarter / 60)).padStart(2, '0'))
+    setSecondsInQuarter(String(Math.abs(totalSecondsInQuarter - minutesInQuarter * 60)).padStart(2, '0'))
+    if (totalSecondsInQuarter < 0 && quarter !== 4)
+    {
+      setQuarter(quarter + 1)
+      setTotalSecondsInQuarter(15 * 60)
     }
-    if (totalSecondsInQuarter<0 && quarter ===4){
-console.log("We know who the winner is")
+    if (totalSecondsInQuarter < 0 && quarter === 4)
+    {
+      console.log("We know who the winner is")
     }
   }
 
@@ -158,7 +171,8 @@ console.log("We know who the winner is")
     }
   }
 
-  function firstDown(){
+  function firstDown()
+  {
     setTogo(10)
     setDown(1)
   }
@@ -171,7 +185,7 @@ console.log("We know who the winner is")
     }
     else { setAwayScore(awayScore + 7) }
     turnover()
-    setBallOn(75 + Math.floor(Math.random()*25))
+    setBallOn(75 + Math.floor(Math.random() * 25))
   }
 
   function newGame()
@@ -182,14 +196,14 @@ console.log("We know who the winner is")
     setDown(1)
     setTotalSecondsInQuarter(15 * 60)
     setMinutesInQuarter(15)
-    setSecondsInQuarter(String(0).padStart(2,'0'))
+    setSecondsInQuarter(String(0).padStart(2, '0'))
     setBallOn(90)
     setTogo(10)
     setYards(0)
   }
 
-//TODO refactor- create a function that takes a typeOfPlay argument (e.g. pass or throw) and returns a distance
-// Create a randomBetween function that returns an int between two given numbers passed as parameters.  
+  //TODO refactor- create a function that takes a typeOfPlay argument (e.g. pass or throw) and returns a distance
+  // Create a randomBetween function that returns an int between two given numbers passed as parameters.  
 
 
   function throwPass()
@@ -206,8 +220,9 @@ console.log("We know who the winner is")
     }
     else if (r < .66)
     { yardsReceived = Math.floor(Math.random() * 4) + 3 } // 3-7
-    else if(r< 80){
-      yardsReceived = Math.floor(Math.random()*30) -10
+    else if (r < 80)
+    {
+      yardsReceived = Math.floor(Math.random() * 30) - 10
     }
     else { yardsReceived = Math.floor(Math.random() * 70) }
     console.log("Yards received:" + yardsReceived)
@@ -227,11 +242,12 @@ console.log("We know who the winner is")
     {
       firstDown()
       setTogo(10)
-      setBallOn(ballOn-yardsReceived)
+      setBallOn(ballOn - yardsReceived)
     }
-    else{
-      setDown(down+1)
-      setBallOn(ballOn-yardsReceived)
+    else
+    {
+      setDown(down + 1)
+      setBallOn(ballOn - yardsReceived)
       setTogo(togo - yardsReceived)
     }
 
@@ -252,18 +268,20 @@ console.log("We know who the winner is")
       setTotalSecondsInQuarter(15 * 60)
     }
     const c = Math.random()
-    let yardsRan = Math.floor(Math.random() * 85)  // random between 0-100
-    if (c < .33)
+    let yardsRan = 0  // random between 0-100
+    if (c < .15)
     {
-      yardsRan = 0
+      yardsRan = Math.floor(Math.random() *-10)
     }
+    else if (c < .4)
+    { yardsRan = Math.floor(Math.random() * 8) }
     else if (c < .6)
-    { yardsRan = Math.floor(yardsRan * .1) }
-    else if (c < .75)
+    { yardsRan = Math.floor(Math.random() * 12) }
+    else if (c < .85)
     {
-      yardsRan = Math.floor(yardsRan * .25)
+      yardsRan = Math.floor(Math.random() * 15)
     }
-    else if (c < .96) { yardsRan = Math.floor(yardsRan * .5) }
+    else if (c > .94) { yardsRan = Math.floor(Math.random() * 50) }
     console.log(yardsRan)
     setYards(yardsRan)
     if (yardsRan > ballOn)  // if more than enough to score
@@ -286,7 +304,7 @@ console.log("We know who the winner is")
     {
       setTogo(10)
       setDown(1)
-      setBallOn(ballOn-yardsRan)
+      setBallOn(ballOn - yardsRan)
     }
     else
     {
@@ -306,11 +324,12 @@ console.log("We know who the winner is")
 
   }
 
-  function pad(n) {
+  function pad(n)
+  {
     return (n < 10) ? ("0" + n) : n;
-}  // Custom function to try to pad timer 0 when single digit
+  }  // Custom function to try to pad timer 0 when single digit
 
-// console.log(String(5).padStart(2, '0')); // Try this to pad the number on the timer
+  // console.log(String(5).padStart(2, '0')); // Try this to pad the number on the timer
 
 
 
@@ -359,22 +378,22 @@ console.log("We know who the winner is")
           <button className="awayButtons__fieldGoal" onClick={() => clickAction('away', 3)}>Away Field Goal</button>
         </div>
         <div>
-        <button className="downup" onClick={() => increment('down')}>Next Down</button>
-        <button className="quarterup" onClick={() => increment('quarter')}>Increment quarter</button>
+          <button className="downup" onClick={() => increment('down')}>Next Down</button>
+          <button className="quarterup" onClick={() => increment('quarter')}>Increment quarter</button>
         </div>
         <div class='playButtons'>
-        <button className="yards" onClick={() => runPlay()}>Run a play</button>
-        <button className="yards" onClick={() => throwPass()}>Throw a pass</button>
+          <button className="yards" onClick={() => runPlay()}>Run a play</button>
+          <button className="yards" onClick={() => throwPass()}>Throw a pass</button>
         </div>
         <div div class='playButtons'>
-        <button className="yards" onClick={() => kickFG()}>Kick FG</button>
-        <button className="yards" onClick={() => punt()}>Punt</button>
+          <button className="yards" onClick={() => kickFG()}>Kick FG</button>
+          <button className="yards" onClick={() => punt()}>Punt</button>
         </div>
         <button className="yards" onClick={() => newGame()}>Start Over</button>
 
 
       </section>
-      <div className="yards" style={{fontSize: '2rem', textAlign: 'center', width: '100%', margin: '15px auto'}} >Yards: {yards}</div>
+      <div className="yards" style={{ fontSize: '2rem', textAlign: 'center', width: '100%', margin: '15px auto' }} >Yards: {yards}</div>
     </div>
   );
 }
